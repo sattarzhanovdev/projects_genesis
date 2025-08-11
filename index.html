@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Project Tracker — Projects</title>
+<style>
+  :root{
+    --bg:#0f1216; --panel:#151a21; --muted:#8b98a5; --text:#e9eef5;
+    --accent:#4e9cff; --accent-2:#8b5cf6; --success:#22c55e; --danger:#ef4444;
+    --border:#222a33; --card:#10151b; --shadow:0 10px 30px rgba(0,0,0,.35);
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:linear-gradient(180deg,#0b0e12,#0f1216 20%);
+    color:var(--text); font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji";
+  }
+  .app{max-width:1200px; margin:24px auto; padding:0 16px}
+  header{display:flex; align-items:center; gap:12px; margin-bottom:16px}
+  .logo{display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--panel);
+    border:1px solid var(--border); border-radius:999px; box-shadow:var(--shadow)}
+  .logo b{letter-spacing:.5px}
+  .dot{width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent-2))}
+  .controls{margin-left:auto; display:flex; gap:10px; align-items:center}
+  input[type="search"], select{
+    background:var(--panel); border:1px solid var(--border); color:var(--text);
+    padding:10px 12px; border-radius:12px; outline:none; min-width:140px;
+  }
+  input[type="search"]{min-width:260px}
+  .btn{
+    padding:10px 14px; border-radius:12px; border:1px solid transparent; cursor:pointer;
+    color:#fff; background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:var(--shadow);
+  }
+  .btn.secondary{background:transparent; border-color:var(--border); color:var(--text)}
+  .board{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:16px}
+  .col{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:12px; min-height:280px; display:flex; flex-direction:column; gap:10px}
+  .col h3{margin:2px 4px 8px; font-size:14px; color:var(--muted); letter-spacing:.3px}
+  .dropzone{flex:1; display:flex; flex-direction:column; gap:10px; padding:4px; border-radius:12px; transition:background .15s ease}
+  .dropzone.dragover{outline:2px dashed var(--accent); outline-offset:2px; background:rgba(78,156,255,.08)}
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px;
+    box-shadow:var(--shadow); display:flex; flex-direction:column; gap:10px; cursor:grab;
+  }
+  .card:active{cursor:grabbing}
+  .row{display:flex; align-items:center; justify-content:space-between; gap:8px}
+  .title{font-weight:600; font-size:15px}
+  .meta{display:flex; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:12px}
+  .chip{padding:4px 8px; border-radius:999px; background:#0d131a; border:1px solid var(--border)}
+  .chip.prio-high{border-color:#ef44444d; color:#ff9aa7}
+  .chip.prio-med{border-color:#eab3084d; color:#ffe08a}
+  .chip.prio-low{border-color:#22c55e4d; color:#b7f7c9}
+  .progress{height:8px; background:#0a0f14; border:1px solid var(--border); border-radius:999px; overflow:hidden}
+  .bar{height:100%; width:0; background:linear-gradient(90deg,var(--accent),var(--success))}
+  .card .actions{display:flex; gap:6px}
+  .iconbtn{
+    background:transparent; border:1px solid var(--border); color:var(--muted);
+    padding:6px 8px; border-radius:10px; cursor:pointer;
+  }
+  .iconbtn:hover{border-color:#2a3644; color:#c3cfdb}
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center;
+    z-index:50; padding:16px;
+  }
+  .modal{width:100%; max-width:560px; background:var(--panel); border:1px solid var(--border); border-radius:18px; box-shadow:var(--shadow); padding:16px}
+  .modal h2{margin:0 0 10px}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .grid-1{display:grid; grid-template-columns:1fr; gap:10px}
+  label{font-size:12px; color:var(--muted)}
+  input[type="text"], input[type="date"], input[type="number"], textarea, select{
+    width:100%; padding:10px 12px; background:#0e141a; border:1px solid var(--border); color:var(--text); border-radius:12px;
+  }
+  textarea{min-height:90px; resize:vertical}
+  .modal .footer{margin-top:12px; display:flex; justify-content:flex-end; gap:10px}
+  .empty{
+    opacity:.7; font-size:13px; text-align:center; padding:18px; border:1px dashed var(--border); border-radius:12px;
+  }
+  @media (max-width:900px){ .board{grid-template-columns:1fr} .controls{flex-wrap:wrap} input[type="search"]{min-width:unset; flex:1} }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo"><span class="dot"></span><b>Project Tracker</b></div>
+    <a href="./tasks.html" class="btn secondary">Задачи</a>
+    <div class="controls">
+      <input id="q" type="search" placeholder="Поиск по названию…" />
+      <select id="filterPrio" title="Приоритет">
+        <option value="">Все приоритеты</option>
+        <option value="high">Высокий</option>
+        <option value="med">Средний</option>
+        <option value="low">Низкий</option>
+      </select>
+      <select id="sortBy" title="Сортировка">
+        <option value="createdAt-desc">Сначала новые</option>
+        <option value="createdAt-asc">Сначала старые</option>
+        <option value="due-asc">Срок ближе</option>
+        <option value="due-desc">Срок дальше</option>
+        <option value="progress-desc">Прогресс по убыванию</option>
+        <option value="progress-asc">Прогресс по возрастанию</option>
+      </select>
+      <button class="btn" id="addBtn">+ Проект</button>
+      <button class="btn secondary" id="resetBtn" title="Обновить с сервера">Обновить</button>
+    </div>
+  </header>
+
+  <section class="board" id="board">
+    <div class="col" data-status="backlog">
+      <h3>Backlog</h3>
+      <div class="dropzone" data-status="backlog"></div>
+    </div>
+    <div class="col" data-status="inprogress">
+      <h3>In Progress</h3>
+      <div class="dropzone" data-status="inprogress"></div>
+    </div>
+    <div class="col" data-status="done">
+      <h3>Done</h3>
+      <div class="dropzone" data-status="done"></div>
+    </div>
+  </section>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle">Новый проект</h2>
+    <form id="projectForm">
+      <input type="hidden" id="projectId" />
+      <div class="grid">
+        <div>
+          <label>Название</label>
+          <input id="title" type="text" placeholder="Например, Сайт Technofoods" required />
+        </div>
+        <div>
+          <label>Клиент (необязательно)</label>
+          <input id="client" type="text" placeholder="Компания/клиент" />
+        </div>
+        <div>
+          <label>Срок</label>
+          <input id="due" type="date" />
+        </div>
+        <div>
+          <label>Приоритет</label>
+          <select id="priority">
+            <option value="high">Высокий</option>
+            <option value="med" selected>Средний</option>
+            <option value="low">Низкий</option>
+          </select>
+        </div>
+        <div>
+          <label>Статус</label>
+          <select id="status">
+            <option value="backlog">Backlog</option>
+            <option value="inprogress" selected>In Progress</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div>
+          <label>Прогресс (%)</label>
+          <input id="progress" type="number" min="0" max="100" step="5" value="0" />
+        </div>
+      </div>
+      <div class="grid-1" style="margin-top:10px">
+        <div>
+          <label>Описание</label>
+          <textarea id="desc" placeholder="Коротко о проекте, ключевые задачи…"></textarea>
+        </div>
+      </div>
+      <div class="footer">
+        <button type="button" class="btn secondary" id="cancelBtn">Отмена</button>
+        <button class="btn" type="submit" id="saveBtn">Сохранить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+(() => {
+  // ---- API CONFIG ----
+  const API_BASE = "http://genesisprojectsapi.pythonanywhere.com/api";
+  const endpoints = {
+    projects: () => `${API_BASE}/projects/`,
+    project:  (id) => `${API_BASE}/projects/${id}/`,
+  };
+
+  // ---- DOM ----
+  const $  = (s, r=document)=> r.querySelector(s);
+  const $$ = (s, r=document)=> [...r.querySelectorAll(s)];
+  const board = $('#board');
+  const addBtn = $('#addBtn');
+  const resetBtn = $('#resetBtn'); // обновить с сервера
+  const q = $('#q');
+  const filterPrio = $('#filterPrio');
+  const sortBy = $('#sortBy');
+
+  const modalBackdrop = $('#modalBackdrop');
+  const projectForm = $('#projectForm');
+  const modalTitle = $('#modalTitle');
+  const cancelBtn = $('#cancelBtn');
+  const projectId = $('#projectId');
+  const title = $('#title');
+  const client = $('#client');
+  const desc = $('#desc');
+  const due = $('#due');
+  const priority = $('#priority');
+  const status = $('#status');
+  const progress = $('#progress');
+
+  /** @type {ProjectDTO[]} */
+  let projects = [];
+
+  // ---- INIT ----
+  init();
+  async function init(){
+    attachDnD();
+    wireEvents();
+    await refresh();
+  }
+  function wireEvents(){
+    addBtn.addEventListener('click', () => openModal());
+    resetBtn.addEventListener('click', () => refresh());
+    cancelBtn.addEventListener('click', closeModal);
+    modalBackdrop.addEventListener('click', (e)=>{ if(e.target===modalBackdrop) closeModal(); });
+
+    projectForm.addEventListener('submit', onSubmit);
+    q.addEventListener('input', debounce(refresh, 250));
+    filterPrio.addEventListener('change', refresh);
+    sortBy.addEventListener('change', refresh);
+
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape') closeModal();
+      if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n'){ e.preventDefault(); openModal(); }
+    });
+  }
+
+  async function refresh(){
+    await loadProjects();
+    render();
+  }
+
+  // ---- API HELPERS ----
+  async function apiFetch(url, opts={}){
+    const res = await fetch(url, {headers:{'Content-Type':'application/json'}, ...opts});
+    if(!res.ok){
+      const txt = await res.text().catch(()=>res.statusText);
+      throw new Error(`HTTP ${res.status}: ${txt}`);
+    }
+    if(res.status===204) return null;
+    return await res.json();
+  }
+  async function loadAllPages(url){
+    let out = [];
+    while(url){
+      const data = await apiFetch(url);
+      if(Array.isArray(data)){ out = data; break; }
+      out = out.concat(data.results || []);
+      url = data.next;
+    }
+    return out;
+  }
+  function orderingParam(){
+    const v = (sortBy.value || 'createdAt-desc');
+    const [key, dir] = v.split('-');
+    const map = {createdAt:'created_at', due:'due', progress:'progress'};
+    const apiKey = map[key] || 'created_at';
+    return (dir==='asc') ? apiKey : `-${apiKey}`;
+  }
+
+  async function loadProjects(){
+    const sp = new URLSearchParams();
+    const query = q.value.trim();
+    const prio  = filterPrio.value.trim();
+
+    if(query) sp.set('search', query);
+    // серверная фильтрация по приоритету в базовой конфигурации DRF не включена — отфильтруем на клиенте
+    sp.set('ordering', orderingParam());
+    sp.set('page_size', '500');
+
+    projects = await loadAllPages(`${endpoints.projects()}?${sp.toString()}`);
+
+    if(prio) projects = projects.filter(p => p.priority === prio);
+  }
+
+  // ---- MODAL ----
+  function openModal(p=null){
+    modalTitle.textContent = p ? 'Редактирование проекта' : 'Новый проект';
+    projectId.value = p?.id || '';
+    title.value = p?.title || '';
+    client.value = p?.client || '';
+    desc.value = p?.desc || '';
+    due.value = p?.due || '';
+    priority.value = p?.priority || 'med';
+    status.value = p?.status || 'inprogress';
+    progress.value = typeof p?.progress==='number' ? p.progress : 0;
+    modalBackdrop.style.display = 'flex';
+    requestAnimationFrame(()=> title.focus());
+  }
+  function closeModal(){
+    modalBackdrop.style.display = 'none';
+    projectForm.reset();
+    projectId.value = '';
+  }
+
+  async function onSubmit(e){
+    e.preventDefault();
+    const payload = {
+      title: title.value.trim(),
+      client: client.value.trim(),
+      desc: desc.value.trim(),
+      due: due.value || null,
+      priority: /** @type any */(priority.value),
+      status: /** @type any */(status.value),
+      progress: clamp(parseInt(progress.value||'0',10), 0, 100),
+    };
+    if(!payload.title){ alert('Название обязательно'); return; }
+
+    try{
+      if(projectId.value){
+        await apiFetch(endpoints.project(projectId.value), { method:'PATCH', body: JSON.stringify(payload) });
+      }else{
+        await apiFetch(endpoints.projects(), { method:'POST', body: JSON.stringify(payload) });
+      }
+      closeModal();
+      await refresh();
+    }catch(err){
+      alert('Ошибка сохранения: ' + err.message);
+    }
+  }
+
+  // ---- DELETE ----
+  async function delProject(id){
+    if(!confirm('Удалить проект?')) return;
+    await apiFetch(endpoints.project(id), { method:'DELETE' });
+    await refresh();
+  }
+
+  // ---- RENDER ----
+  function render(){
+    // Поиск по клиенту/описанию — доведём на клиенте для удобства
+    const query = q.value.trim().toLowerCase();
+    let list = projects.filter(p =>
+      !query ||
+      (p.title||'').toLowerCase().includes(query) ||
+      (p.client||'').toLowerCase().includes(query) ||
+      (p.desc||'').toLowerCase().includes(query)
+    );
+
+    // Очистка колонок
+    $$('.dropzone').forEach(z => z.innerHTML = '');
+
+    // Группировка по статусу
+    const groups = {backlog:[], inprogress:[], done:[]};
+    list.forEach(p => groups[p.status]?.push(p));
+    Object.entries(groups).forEach(([status, arr])=>{
+      const zone = $(`.dropzone[data-status="${status}"]`);
+      if(!arr.length){
+        zone.innerHTML = `<div class="empty">Нет проектов</div>`;
+      } else {
+        arr.forEach(p => zone.appendChild(card(p)));
+      }
+    });
+  }
+
+  function card(p){
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.draggable = true;
+    el.dataset.id = p.id;
+    el.innerHTML = `
+      <div class="row">
+        <div class="title" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</div>
+        <div class="actions">
+          <button class="iconbtn" data-action="edit" title="Редактировать">✎</button>
+          <button class="iconbtn" data-action="del" title="Удалить">🗑</button>
+        </div>
+      </div>
+      <div class="meta">
+        ${p.client ? `<span class="chip">${escapeHtml(p.client)}</span>`:''}
+        <span class="chip prio-${p.priority}">Приоритет: ${prioText(p.priority)}</span>
+        ${p.due ? `<span class="chip">Срок: ${fmtDate(p.due)}</span>`:''}
+        ${typeof p.tasks_count === 'number' ? `<span class="chip">Задач: ${p.tasks_count}</span>`:''}
+      </div>
+      <div class="progress" title="Прогресс ${p.progress||0}%"><div class="bar" style="width:${p.progress||0}%"></div></div>
+      ${p.desc ? `<div class="meta" title="${escapeHtml(p.desc)}">${escapeHtml(shorten(p.desc, 120))}</div>`:''}
+    `;
+
+    el.addEventListener('click', async (e)=>{
+      const btn = /** @type HTMLElement */(e.target);
+      if(btn.dataset.action === 'edit'){ openModal(p); e.stopPropagation(); }
+      if(btn.dataset.action === 'del'){ await delProject(p.id); e.stopPropagation(); }
+    });
+
+    return el;
+  }
+
+  // ---- Drag & Drop: смена статуса проекта ----
+  function attachDnD(){
+    board.addEventListener('dragstart', (e)=>{
+      const card = e.target.closest('.card'); if(!card) return;
+      e.dataTransfer.setData('text/plain', card.dataset.id);
+      requestAnimationFrame(()=> card.style.opacity = '.6');
+    });
+    board.addEventListener('dragend', (e)=>{
+      const card = e.target.closest('.card'); if(card) card.style.opacity = '';
+    });
+
+    $$('.dropzone').forEach(zone=>{
+      zone.addEventListener('dragover', (e)=>{ e.preventDefault(); zone.classList.add('dragover'); });
+      zone.addEventListener('dragleave', ()=> zone.classList.remove('dragover'));
+      zone.addEventListener('drop', async (e)=>{
+        e.preventDefault(); zone.classList.remove('dragover');
+        const id = e.dataTransfer.getData('text/plain');
+        const p = projects.find(x => String(x.id) === String(id));
+        if(!p) return;
+        const newStatus = zone.dataset.status;
+        if(p.status !== newStatus){
+          // Логика прогресса: в Done -> 100%, иначе если был 100% — 90%
+          let newProgress = p.progress;
+          if(newStatus==='done' && (p.progress||0) < 100) newProgress = 100;
+          if(newStatus!=='done' && (p.progress||0) === 100) newProgress = 90;
+
+          try{
+            await apiFetch(endpoints.project(p.id), {
+              method:'PATCH',
+              body: JSON.stringify({ status: newStatus, progress: newProgress })
+            });
+            await refresh();
+          }catch(err){
+            alert('Не удалось переместить: ' + err.message);
+          }
+        }
+      });
+    });
+  }
+
+  // ---- UTILS ----
+  function debounce(fn, wait=250){
+    let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), wait); };
+  }
+  function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+  function prioText(v){ return v==='high'?'Высокий': v==='med'?'Средний':'Низкий'; }
+  function fmtDate(d){ try{ return new Date(d+'T00:00:00').toLocaleDateString(); }catch{ return d; } }
+  function shorten(s,n){ return (s||'').length>n ? s.slice(0,n-1)+'…' : (s||''); }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+
+  // types
+  /**
+   * @typedef {{id:number,title:string,client:string,desc:string,due:string|null,priority:'high'|'med'|'low',status:'backlog'|'inprogress'|'done',progress:number,created_at:string,tasks_count?:number}} ProjectDTO
+   */
+})();
+</script>
+</body>
+</html>
