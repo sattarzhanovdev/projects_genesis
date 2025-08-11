@@ -19,6 +19,7 @@
         --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
         --radius: 16px;
       }
+
       * {
         box-sizing: border-box;
       }
@@ -34,16 +35,21 @@
           Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji",
           "Segoe UI Emoji";
       }
+
+      /* Layout */
       .app {
         max-width: 1200px;
         margin: 24px auto;
         padding: 0 16px;
       }
+
+      /* Header */
       header {
         display: flex;
         align-items: center;
         gap: 12px;
         margin-bottom: 16px;
+        flex-wrap: wrap;
       }
       .logo {
         display: flex;
@@ -54,6 +60,7 @@
         border: 1px solid var(--border);
         border-radius: 999px;
         box-shadow: var(--shadow);
+        white-space: nowrap;
       }
       .logo b {
         letter-spacing: 0.5px;
@@ -64,11 +71,14 @@
         border-radius: 50%;
         background: linear-gradient(135deg, var(--accent), var(--accent-2));
       }
+
       .controls {
         margin-left: auto;
         display: flex;
         gap: 10px;
         align-items: center;
+        flex-wrap: wrap;
+        min-width: 40%;
       }
       input[type="search"],
       select {
@@ -83,6 +93,7 @@
       input[type="search"] {
         min-width: 260px;
       }
+
       .btn {
         padding: 10px 14px;
         border-radius: 12px;
@@ -91,12 +102,15 @@
         color: #fff;
         background: linear-gradient(135deg, var(--accent), var(--accent-2));
         box-shadow: var(--shadow);
+        white-space: nowrap;
       }
       .btn.secondary {
         background: transparent;
         border-color: var(--border);
         color: var(--text);
       }
+
+      /* Board */
       .board {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -126,13 +140,15 @@
         gap: 10px;
         padding: 4px;
         border-radius: 12px;
-        transition: background 0.15s ease;
+        transition: background 0.15s ease, outline-color 0.15s ease;
       }
       .dropzone.dragover {
         outline: 2px dashed var(--accent);
         outline-offset: 2px;
         background: rgba(78, 156, 255, 0.08);
       }
+
+      /* Cards */
       .card {
         background: var(--card);
         border: 1px solid var(--border);
@@ -143,6 +159,7 @@
         flex-direction: column;
         gap: 10px;
         cursor: grab;
+        touch-action: manipulation;
       }
       .card:active {
         cursor: grabbing;
@@ -156,6 +173,9 @@
       .title {
         font-weight: 600;
         font-size: 15px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .meta {
         display: flex;
@@ -182,6 +202,7 @@
         border-color: #22c55e4d;
         color: #b7f7c9;
       }
+
       .progress {
         height: 8px;
         background: #0a0f14;
@@ -194,6 +215,7 @@
         width: 0;
         background: linear-gradient(90deg, var(--accent), var(--success));
       }
+
       .card .actions {
         display: flex;
         gap: 6px;
@@ -210,6 +232,8 @@
         border-color: #2a3644;
         color: #c3cfdb;
       }
+
+      /* Modal */
       .modal-backdrop {
         position: fixed;
         inset: 0;
@@ -268,6 +292,7 @@
         justify-content: flex-end;
         gap: 10px;
       }
+
       .empty {
         opacity: 0.7;
         font-size: 13px;
@@ -276,16 +301,230 @@
         border: 1px dashed var(--border);
         border-radius: 12px;
       }
+
+      /* ---------- Responsive cards tweaks ---------- */
+
+/* Cards breathe better on tablets */
+@media (max-width: 900px) {
+  .card { gap: 8px; padding: 10px; border-radius: 12px; }
+  .title { font-size: 14px; }
+  .chip { padding: 3px 7px; }
+  .progress { height: 6px; }
+}
+
+/* Reflow card header & meta for phones */
+@media (max-width: 560px) {
+  /* Header row: actions go to the next line, title wraps */
+  .card .row {
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
+  .card .row .actions {
+    order: 2;
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .card .title {
+    order: 1;
+    width: 100%;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.25;
+  }
+
+  /* Meta becomes a compact grid */
+  .card .meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .card .chip {
+    min-width: 0;
+    font-size: 11px;
+    padding: 3px 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Buttons easier to tap */
+  .iconbtn { padding: 8px 10px; border-radius: 12px; }
+}
+
+/* Ultra-narrow devices: single-column meta, sticky actions */
+@media (max-width: 420px) {
+  .card { padding: 9px; gap: 6px; }
+  .card .meta { grid-template-columns: 1fr; }
+  .card .row .actions { gap: 8px; }
+  .btn, .iconbtn { font-size: 13px; }
+}
+
+/* Touch-friendly targets on coarse pointers */
+@media (hover: none) and (pointer: coarse) {
+  .iconbtn, .btn { padding: 12px 14px; }
+}
+      /* ---------- Responsive ---------- */
+
+      /* <= 1200px: slightly denser grid */
+      @media (max-width: 1200px) {
+        .board {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 14px;
+        }
+      }
+
+      /* <= 1024px: two columns */
+      @media (max-width: 1024px) {
+        .board {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .app {
+          padding: 0 14px;
+        }
+        .title {
+          font-size: 14px;
+        }
+      }
+
+      /* <= 900px: stack header nicely */
       @media (max-width: 900px) {
+        header {
+          gap: 10px;
+        }
+        .controls {
+          width: 100%;
+          order: 2;
+          margin-left: 0;
+        }
+        .logo {
+          order: 1;
+        }
         .board {
           grid-template-columns: 1fr;
         }
-        .controls {
-          flex-wrap: wrap;
-        }
         input[type="search"] {
           min-width: unset;
-          flex: 1;
+          flex: 1 1 220px;
+        }
+      }
+
+      /* <= 768px: full-width inputs/buttons, modal 1-col */
+      @media (max-width: 768px) {
+        .app {
+          margin: 16px auto;
+        }
+        .controls {
+          gap: 8px;
+        }
+        .btn,
+        select,
+        input[type="search"] {
+          flex: 1 1 auto;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .modal {
+          max-width: 640px;
+          padding: 14px;
+          border-radius: 16px;
+        }
+        .modal .footer {
+          flex-wrap: wrap;
+        }
+        .modal .footer .btn {
+          flex: 1 0 140px;
+        }
+      }
+
+      /* <= 600px: compact paddings, sticky header controls */
+      @media (max-width: 600px) {
+        .app {
+          padding: 0 12px;
+        }
+        header {
+          position: sticky;
+          top: 0;
+          z-index: 20;
+          background: linear-gradient(
+            180deg,
+            rgba(15, 18, 22, 0.96),
+            rgba(15, 18, 22, 0.92)
+          );
+          padding: 8px 0;
+        }
+        .logo {
+          padding: 8px 12px;
+        }
+        .dot {
+          width: 8px;
+          height: 8px;
+        }
+        .col {
+          padding: 10px;
+        }
+        .card {
+          padding: 10px;
+          border-radius: 12px;
+        }
+        .chip {
+          padding: 3px 7px;
+        }
+        .progress {
+          height: 6px;
+        }
+      }
+
+      /* <= 480px: single-column, modal fullscreen */
+      @media (max-width: 480px) {
+        body {
+          font-size: 14px;
+        }
+        .controls {
+          gap: 6px;
+        }
+        .btn {
+          padding: 10px 12px;
+          border-radius: 10px;
+        }
+        .modal {
+          max-width: none;
+          width: 100%;
+          height: 100dvh;
+          border-radius: 0;
+          padding: 16px;
+          overflow: auto;
+        }
+        .modal .footer {
+          position: sticky;
+          bottom: 0;
+          background: var(--panel);
+          padding-top: 10px;
+        }
+        .modal .footer .btn {
+          flex: 1 0 45%;
+        }
+      }
+
+      /* Touch improvements */
+      @media (hover: none) and (pointer: coarse) {
+        .iconbtn,
+        .btn {
+          padding: 12px 14px;
+        }
+        .iconbtn {
+          border-radius: 12px;
+        }
+      }
+
+      /* Reduce motion if user prefers */
+      @media (prefers-reduced-motion: reduce) {
+        .dropzone {
+          transition: none;
+        }
+        * {
+          scroll-behavior: auto !important;
         }
       }
     </style>
