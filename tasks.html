@@ -1,675 +1,1187 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Task Tracker — HTML/CSS/JS</title>
-<style>
-  /* ==== Task Tracker – FULL responsive style ==== */
-:root{
-  --bg:#0f1216; --panel:#151a21; --muted:#8b98a5; --text:#e9eef5;
-  --accent:#4e9cff; --accent-2:#8b5cf6; --success:#22c55e; --danger:#ef4444;
-  --border:#222a33; --card:#10151b; --shadow:0 10px 30px rgba(0,0,0,.35);
-  --radius:16px;
-}
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Task Tracker — HTML/CSS/JS</title>
+    <style>
+      /* ==== Task Tracker – FULL responsive style ==== */
+      :root {
+        --bg: #0f1216;
+        --panel: #151a21;
+        --muted: #8b98a5;
+        --text: #e9eef5;
+        --accent: #4e9cff;
+        --accent-2: #8b5cf6;
+        --success: #22c55e;
+        --danger: #ef4444;
+        --border: #222a33;
+        --card: #10151b;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        --radius: 16px;
+      }
 
-*{box-sizing:border-box}
-html,body{height:100%}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  background:linear-gradient(180deg,#0b0e12,#0f1216 20%);
-  color:var(--text);
-  font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
-}
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #0b0e12, #0f1216 20%);
+        color: var(--text);
+        font: 15px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+          Cantarell, "Helvetica Neue", Arial;
+      }
 
-/* Layout */
-.app{max-width:1200px; margin:24px auto; padding:0 16px}
+      /* Layout */
+      .app {
+        max-width: 1200px;
+        margin: 24px auto;
+        padding: 0 16px;
+      }
 
-/* Header */
-header{
-  display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap;
-}
-.logo{
-  display:flex; align-items:center; gap:10px; padding:10px 14px;
-  background:var(--panel); border:1px solid var(--border);
-  border-radius:999px; box-shadow:var(--shadow); white-space:nowrap;
-}
-.logo b{letter-spacing:.4px}
-.dot{width:10px;height:10px;border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),var(--accent-2))}
+      /* Header */
+      header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        box-shadow: var(--shadow);
+        white-space: nowrap;
+      }
+      .logo b {
+        letter-spacing: 0.4px;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      }
 
-nav{margin-left:auto; display:flex; gap:8px; flex-wrap:wrap}
-a.nav,button.nav{
-  padding:10px 12px; border-radius:12px; border:1px solid var(--border);
-  background:transparent; color:var(--text); text-decoration:none; cursor:pointer;
-}
-a.nav[aria-current="page"]{border-color:#2a3644;color:#c3cfdb}
+      nav {
+        margin-left: auto;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      a.nav,
+      button.nav {
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text);
+        text-decoration: none;
+        cursor: pointer;
+      }
+      a.nav[aria-current="page"] {
+        border-color: #2a3644;
+        color: #c3cfdb;
+      }
 
-/* Controls */
-.controls{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
-input[type="search"], select{
-  background:var(--panel); border:1px solid var(--border); color:var(--text);
-  padding:10px 12px; border-radius:12px; outline:none; min-width:160px;
-}
-input[type="search"]{min-width:280px; flex:1 1 260px}
-.btn{
-  padding:10px 14px; border-radius:12px; border:1px solid transparent; cursor:pointer;
-  color:#fff; background:linear-gradient(135deg,var(--accent),var(--accent-2));
-  box-shadow:var(--shadow); white-space:nowrap;
-}
-.btn.secondary{background:transparent;color:var(--text);border-color:var(--border)}
-.btn:focus-visible, .nav:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
-  outline:2px solid var(--accent); outline-offset:2px; border-color:transparent;
-}
+      /* Controls */
+      .controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      input[type="search"],
+      select {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 10px 12px;
+        border-radius: 12px;
+        outline: none;
+        min-width: 160px;
+      }
+      input[type="search"] {
+        min-width: 280px;
+        flex: 1 1 260px;
+      }
+      .btn {
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        color: #fff;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        box-shadow: var(--shadow);
+        white-space: nowrap;
+      }
+      .btn.secondary {
+        background: transparent;
+        color: var(--text);
+        border-color: var(--border);
+      }
+      .btn:focus-visible,
+      .nav:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      textarea:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+        border-color: transparent;
+      }
 
-/* Board */
-.board{
-  display:grid; grid-template-columns:repeat(3,1fr);
-  gap:16px; margin-top:16px;
-}
-.col{
-  background:var(--panel); border:1px solid var(--border);
-  border-radius:var(--radius); padding:12px; min-height:280px;
-  display:flex; flex-direction:column; gap:10px;
-}
-.col h3{margin:2px 4px 8px; font-size:14px; color:var(--muted)}
-.dropzone{
-  flex:1; display:flex; flex-direction:column; gap:10px; padding:4px;
-  border-radius:12px; transition:background .15s ease, outline-color .15s ease;
-  min-height:60px;
-}
-.dropzone.dragover{outline:2px dashed var(--accent); outline-offset:2px; background:rgba(78,156,255,.08)}
-.empty{
-  opacity:.7; font-size:13px; text-align:center; padding:18px;
-  border:1px dashed var(--border); border-radius:12px
-}
+      /* Board */
+      .board {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 16px;
+      }
+      .col {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 12px;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .col h3 {
+        margin: 2px 4px 8px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .dropzone {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 4px;
+        border-radius: 12px;
+        transition: background 0.15s ease, outline-color 0.15s ease;
+        min-height: 60px;
+      }
+      .dropzone.dragover {
+        outline: 2px dashed var(--accent);
+        outline-offset: 2px;
+        background: rgba(78, 156, 255, 0.08);
+      }
+      .empty {
+        opacity: 0.7;
+        font-size: 13px;
+        text-align: center;
+        padding: 18px;
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+      }
 
-/* Cards */
-.card{
-  background:var(--card); border:1px solid var(--border); border-radius:14px;
-  padding:12px; box-shadow:var(--shadow); display:flex; flex-direction:column;
-  gap:10px; cursor:grab; touch-action:manipulation;
-}
-.card:active{cursor:grabbing}
-.row{display:flex; align-items:center; justify-content:space-between; gap:8px}
-.title{font-weight:600; font-size:15px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.meta{display:flex; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:12px}
-.chip{padding:4px 8px; border-radius:999px; background:#0d131a; border:1px solid var(--border); max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.prio-high{border-color:#ef44444d; color:#ff9aa7}
-.prio-med{border-color:#eab3084d; color:#ffe08a}
-.prio-low{border-color:#22c55e4d; color:#b7f7c9}
+      /* Cards */
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        cursor: grab;
+        touch-action: manipulation;
+      }
+      .card:active {
+        cursor: grabbing;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .title {
+        font-weight: 600;
+        font-size: 15px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .chip {
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: #0d131a;
+        border: 1px solid var(--border);
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .prio-high {
+        border-color: #ef44444d;
+        color: #ff9aa7;
+      }
+      .prio-med {
+        border-color: #eab3084d;
+        color: #ffe08a;
+      }
+      .prio-low {
+        border-color: #22c55e4d;
+        color: #b7f7c9;
+      }
 
-.subtasks{display:flex; flex-direction:column; gap:6px}
-.subtasks label{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted)}
-.subtasks input[type="checkbox"]{width:16px;height:16px; accent-color:var(--accent)}
+      .subtasks {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .subtasks label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .subtasks input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--accent);
+      }
 
-.actions{display:flex; gap:6px; flex:0 0 auto}
-.iconbtn{
-  background:transparent; border:1px solid var(--border); color:var(--muted);
-  padding:6px 8px; border-radius:10px; cursor:pointer;
-}
-.iconbtn:hover{border-color:#2a3644; color:#c3cfdb}
+      .actions {
+        display: flex;
+        gap: 6px;
+        flex: 0 0 auto;
+      }
+      .iconbtn {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        padding: 6px 8px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      .iconbtn:hover {
+        border-color: #2a3644;
+        color: #c3cfdb;
+      }
 
-/* Modal */
-.backdrop{
-  position:fixed; inset:0; background:rgba(0,0,0,.55);
-  display:none; align-items:center; justify-content:center; z-index:50; padding:16px
-}
-.modal{
-  width:100%; max-width:640px; background:var(--panel);
-  border:1px solid var(--border); border-radius:18px;
-  box-shadow:var(--shadow); padding:16px
-}
-.modal h2{margin:0 0 10px}
-.grid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-.grid-1{display:grid; grid-template-columns:1fr; gap:10px}
-label.small{font-size:12px; color:var(--muted)}
-input[type="text"], input[type="date"], input[type="number"], textarea, select{
-  width:100%; padding:10px 12px; background:#0e141a; border:1px solid var(--border);
-  color:var(--text); border-radius:12px
-}
-textarea{min-height:80px; resize:vertical}
-.modal .footer{margin-top:12px; display:flex; justify-content:flex-end; gap:10px}
+      /* Modal */
+      .backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+        padding: 16px;
+      }
+      .modal {
+        width: 100%;
+        max-width: 640px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: 16px;
+      }
+      .modal h2 {
+        margin: 0 0 10px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .grid-1 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      label.small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      input[type="text"],
+      input[type="date"],
+      input[type="number"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 10px 12px;
+        background: #0e141a;
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 12px;
+      }
+      textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+      .modal .footer {
+        margin-top: 12px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
 
-/* Scrollbar (WebKit) */
-@supports selector(::-webkit-scrollbar){
-  *::-webkit-scrollbar{width:10px;height:10px}
-  *::-webkit-scrollbar-track{background:#0a0f14}
-  *::-webkit-scrollbar-thumb{background:#1f2833;border-radius:10px;border:2px solid #0a0f14}
-  *::-webkit-scrollbar-thumb:hover{background:#2a3644}
-}
+      /* Scrollbar (WebKit) */
+      @supports selector(::-webkit-scrollbar) {
+        *::-webkit-scrollbar {
+          width: 10px;
+          height: 10px;
+        }
+        *::-webkit-scrollbar-track {
+          background: #0a0f14;
+        }
+        *::-webkit-scrollbar-thumb {
+          background: #1f2833;
+          border-radius: 10px;
+          border: 2px solid #0a0f14;
+        }
+        *::-webkit-scrollbar-thumb:hover {
+          background: #2a3644;
+        }
+      }
 
-/* ================== RESPONSIVE ================== */
+      /* ================== RESPONSIVE ================== */
 
-/* <= 1280px: tighter gaps */
-@media (max-width:1280px){
-  .board{gap:14px}
-}
+      /* <= 1280px: tighter gaps */
+      @media (max-width: 1280px) {
+        .board {
+          gap: 14px;
+        }
+      }
 
-/* <= 1100px: two columns board */
-@media (max-width:1100px){
-  .board{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .app{padding:0 14px}
-}
+      /* <= 1100px: two columns board */
+      @media (max-width: 1100px) {
+        .board {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .app {
+          padding: 0 14px;
+        }
+      }
 
-/* <= 900px: single column board, sticky header */
-@media (max-width:900px){
-  header{gap:10px}
-  .board{grid-template-columns:1fr}
-  .app{margin:16px auto}
-  /* sticky header/controls for mobile usability */
-  header{position:sticky; top:0; z-index:20; padding:8px 0;
-    background:linear-gradient(180deg,rgba(15,18,22,.96),rgba(15,18,22,.92))}
-  /* nav & controls wrap to full width */
-  nav{width:100%; order:2; margin-left:0}
-  .controls{width:100%; order:3}
-  .logo{order:1}
-  input[type="search"]{min-width:unset; flex:1 1 220px}
-  .card{padding:10px; border-radius:12px}
-  .title{font-size:14px}
-  .chip{padding:3px 7px}
-}
+      /* <= 900px: single column board, sticky header */
+      @media (max-width: 900px) {
+        header {
+          gap: 10px;
+        }
+        .board {
+          grid-template-columns: 1fr;
+        }
+        .app {
+          margin: 16px auto;
+        }
+        /* sticky header/controls for mobile usability */
+        header {
+          position: sticky;
+          top: 0;
+          z-index: 20;
+          padding: 8px 0;
+          background: linear-gradient(
+            180deg,
+            rgba(15, 18, 22, 0.96),
+            rgba(15, 18, 22, 0.92)
+          );
+        }
+        /* nav & controls wrap to full width */
+        nav {
+          width: 100%;
+          order: 2;
+          margin-left: 0;
+        }
+        .controls {
+          width: 100%;
+          order: 3;
+        }
+        .logo {
+          order: 1;
+        }
+        input[type="search"] {
+          min-width: unset;
+          flex: 1 1 220px;
+        }
+        .card {
+          padding: 10px;
+          border-radius: 12px;
+        }
+        .title {
+          font-size: 14px;
+        }
+        .chip {
+          padding: 3px 7px;
+        }
+      }
 
-/* <= 768px: modal one-column, bigger touch targets */
-@media (max-width:768px){
-  .grid{grid-template-columns:1fr}
-  .modal{max-width:640px; padding:14px; border-radius:16px}
-  .modal .footer{flex-wrap:wrap}
-  .modal .footer .btn{flex:1 0 140px}
-  .iconbtn,.btn{padding:12px 14px}
-}
+      /* <= 768px: modal one-column, bigger touch targets */
+      @media (max-width: 768px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .modal {
+          max-width: 640px;
+          padding: 14px;
+          border-radius: 16px;
+        }
+        .modal .footer {
+          flex-wrap: wrap;
+        }
+        .modal .footer .btn {
+          flex: 1 0 140px;
+        }
+        .iconbtn,
+        .btn {
+          padding: 12px 14px;
+        }
+      }
 
-/* <= 600px: compact paddings, progress + meta grid */
-@media (max-width:600px){
-  .app{padding:0 12px}
-  .col{padding:10px}
-  .progress{height:6px}
-  /* CARD HEADER reflow: actions to next line */
-  .card .row{flex-wrap:wrap; gap:6px 10px}
-  .card .title{
-    order:1; width:100%; white-space:normal; overflow:visible; text-overflow:clip; line-height:1.25
-  }
-  .card .actions{order:2; width:100%; justify-content:flex-end}
-  /* META becomes 2-col grid */
-  .card .meta{
-    display:grid; grid-template-columns:1fr 1fr; gap:6px;
-  }
-  .card .chip{
-    min-width:0; font-size:11px; padding:3px 6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap
-  }
-  /* SUBTASKS: larger checkboxes for touch */
-  .subtasks input[type="checkbox"]{width:18px;height:18px}
-}
+      /* <= 600px: compact paddings, progress + meta grid */
+      @media (max-width: 600px) {
+        .app {
+          padding: 0 12px;
+        }
+        .col {
+          padding: 10px;
+        }
+        .progress {
+          height: 6px;
+        }
+        /* CARD HEADER reflow: actions to next line */
+        .card .row {
+          flex-wrap: wrap;
+          gap: 6px 10px;
+        }
+        .card .title {
+          order: 1;
+          width: 100%;
+          white-space: normal;
+          overflow: visible;
+          text-overflow: clip;
+          line-height: 1.25;
+        }
+        .card .actions {
+          order: 2;
+          width: 100%;
+          justify-content: flex-end;
+        }
+        /* META becomes 2-col grid */
+        .card .meta {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 6px;
+        }
+        .card .chip {
+          min-width: 0;
+          font-size: 11px;
+          padding: 3px 6px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        /* SUBTASKS: larger checkboxes for touch */
+        .subtasks input[type="checkbox"] {
+          width: 18px;
+          height: 18px;
+        }
+      }
 
-/* <= 480px: modal fullscreen, single-col meta */
-@media (max-width:480px){
-  body{font-size:14px}
-  .btn{padding:10px 12px; border-radius:10px}
-  .modal{
-    max-width:none; width:100%; height:100dvh; border-radius:0;
-    padding:16px; overflow:auto;
-  }
-  .modal .footer{position:sticky; bottom:0; background:var(--panel); padding-top:10px}
-  .modal .footer .btn{flex:1 0 45%}
-  .card{gap:8px}
-  .card .meta{grid-template-columns:1fr}
-}
+      /* <= 480px: modal fullscreen, single-col meta */
+      @media (max-width: 480px) {
+        body {
+          font-size: 14px;
+        }
+        .btn {
+          padding: 10px 12px;
+          border-radius: 10px;
+        }
+        .modal {
+          max-width: none;
+          width: 100%;
+          height: 100dvh;
+          border-radius: 0;
+          padding: 16px;
+          overflow: auto;
+        }
+        .modal .footer {
+          position: sticky;
+          bottom: 0;
+          background: var(--panel);
+          padding-top: 10px;
+        }
+        .modal .footer .btn {
+          flex: 1 0 45%;
+        }
+        .card {
+          gap: 8px;
+        }
+        .card .meta {
+          grid-template-columns: 1fr;
+        }
+      }
 
-/* <= 380px: extra compact */
-@media (max-width:380px){
-  .logo{padding:8px 12px}
-  .dot{width:8px;height:8px}
-  .chip{font-size:10.5px}
-  .iconbtn,.btn{font-size:13px}
-}
+      /* <= 380px: extra compact */
+      @media (max-width: 380px) {
+        .logo {
+          padding: 8px 12px;
+        }
+        .dot {
+          width: 8px;
+          height: 8px;
+        }
+        .chip {
+          font-size: 10.5px;
+        }
+        .iconbtn,
+        .btn {
+          font-size: 13px;
+        }
+      }
 
-/* Touch-specific tweaks */
-@media (hover:none) and (pointer:coarse){
-  .iconbtn,.btn{padding:12px 16px}
-  .card{gap:8px}
-}
+      /* Touch-specific tweaks */
+      @media (hover: none) and (pointer: coarse) {
+        .iconbtn,
+        .btn {
+          padding: 12px 16px;
+        }
+        .card {
+          gap: 8px;
+        }
+      }
 
-/* Reduced motion */
-@media (prefers-reduced-motion:reduce){
-  .dropzone{transition:none}
-  *{scroll-behavior:auto !important}
-}
-</style>
-</head>
-<body>
-<div class="app">
-  <header>
-    <div class="logo"><span class="dot"></span><b>Task Tracker</b></div>
-    <nav>
-      <a class="nav" href="./index.html">Проекты</a>
-      <a class="nav" href="./tasks.html" aria-current="page">Задачи</a>
-      <button id="addBtn" class="btn">+ Задача</button>
-      <button id="resetBtn" class="btn secondary">Сброс</button>
-    </nav>
-  </header>
+      /* Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .dropzone {
+          transition: none;
+        }
+        * {
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <div class="logo"><span class="dot"></span><b>Task Tracker</b></div>
+        <nav>
+          <a class="nav" href="./index.html">Проекты</a>
+          <a class="nav" href="./tasks.html" aria-current="page">Задачи</a>
+          <button id="addBtn" class="btn">+ Задача</button>
+          <button id="resetBtn" class="btn secondary">Сброс</button>
+        </nav>
+      </header>
 
-  <div class="controls" style="margin-bottom:8px">
-    <input id="q" type="search" placeholder="Поиск по названию / описанию…" />
-    <select id="filterProject"><option value="">Все проекты</option></select>
-    <select id="filterPrio">
-      <option value="">Все приоритеты</option>
-      <option value="high">Высокий</option>
-      <option value="med">Средний</option>
-      <option value="low">Низкий</option>
-    </select>
-    <select id="sortBy">
-      <option value="createdAt-desc">Сначала новые</option>
-      <option value="createdAt-asc">Сначала старые</option>
-      <option value="due-asc">Срок ближе</option>
-      <option value="due-desc">Срок дальше</option>
-      <option value="prio-desc">Приоритет (выс→низ)</option>
-      <option value="prio-asc">Приоритет (низ→выс)</option>
-    </select>
-  </div>
-
-  <section class="board" id="board">
-    <div class="col" data-status="backlog">
-      <h3>Backlog</h3>
-      <div class="dropzone" data-status="backlog"></div>
-    </div>
-    <div class="col" data-status="inprogress">
-      <h3>In Progress</h3>
-      <div class="dropzone" data-status="inprogress"></div>
-    </div>
-    <div class="col" data-status="done">
-      <h3>Done</h3>
-      <div class="dropzone" data-status="done"></div>
-    </div>
-  </section>
-</div>
-
-<!-- Modal -->
-<div class="backdrop" id="backdrop" aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
-    <h2 id="mTitle">Новая задача</h2>
-    <form id="taskForm">
-      <input type="hidden" id="taskId" />
-      <div class="grid">
-        <div>
-          <label class="small">Название</label>
-          <input id="title" type="text" required placeholder="Например, Верстка главной" />
-        </div>
-        <div>
-          <label class="small">Проект</label>
-          <select id="project"></select>
-        </div>
-        <div>
-          <label class="small">Срок</label>
-          <input id="due" type="date" />
-        </div>
-        <div>
-          <label class="small">Приоритет</label>
-          <select id="priority">
-            <option value="high">Высокий</option>
-            <option value="med" selected>Средний</option>
-            <option value="low">Низкий</option>
-          </select>
-        </div>
-        <div>
-          <label class="small">Статус</label>
-          <select id="status">
-            <option value="backlog">Backlog</option>
-            <option value="inprogress" selected>In Progress</option>
-            <option value="done">Done</option>
-          </select>
-        </div>
-        <div>
-          <label class="small">Оценка (часы)</label>
-          <input id="estimate" type="number" min="0" step="0.5" placeholder="0" />
-        </div>
+      <div class="controls" style="margin-bottom: 8px">
+        <input
+          id="q"
+          type="search"
+          placeholder="Поиск по названию / описанию…"
+        />
+        <select id="filterProject">
+          <option value="">Все проекты</option>
+        </select>
+        <select id="filterPrio">
+          <option value="">Все приоритеты</option>
+          <option value="high">Высокий</option>
+          <option value="med">Средний</option>
+          <option value="low">Низкий</option>
+        </select>
+        <select id="sortBy">
+          <option value="createdAt-desc">Сначала новые</option>
+          <option value="createdAt-asc">Сначала старые</option>
+          <option value="due-asc">Срок ближе</option>
+          <option value="due-desc">Срок дальше</option>
+          <option value="prio-desc">Приоритет (выс→низ)</option>
+          <option value="prio-asc">Приоритет (низ→выс)</option>
+        </select>
       </div>
-      <div class="grid-1" style="margin-top:10px">
-        <div>
-          <label class="small">Описание</label>
-          <textarea id="desc" placeholder="Детали задачи…"></textarea>
+
+      <section class="board" id="board">
+        <div class="col" data-status="backlog">
+          <h3>Backlog</h3>
+          <div class="dropzone" data-status="backlog"></div>
         </div>
-        <div>
-          <label class="small">Подзадачи (по одной в строке)</label>
-          <textarea id="subtasks" placeholder="Сверстать хедер
+        <div class="col" data-status="inprogress">
+          <h3>In Progress</h3>
+          <div class="dropzone" data-status="inprogress"></div>
+        </div>
+        <div class="col" data-status="done">
+          <h3>Done</h3>
+          <div class="dropzone" data-status="done"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Modal -->
+    <div class="backdrop" id="backdrop" aria-hidden="true">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="mTitle"
+      >
+        <h2 id="mTitle">Новая задача</h2>
+        <form id="taskForm">
+          <input type="hidden" id="taskId" />
+          <div class="grid">
+            <div>
+              <label class="small">Название</label>
+              <input
+                id="title"
+                type="text"
+                required
+                placeholder="Например, Верстка главной"
+              />
+            </div>
+            <div>
+              <label class="small">Проект</label>
+              <select id="project"></select>
+            </div>
+            <div>
+              <label class="small">Срок</label>
+              <input id="due" type="date" />
+            </div>
+            <div>
+              <label class="small">Приоритет</label>
+              <select id="priority">
+                <option value="high">Высокий</option>
+                <option value="med" selected>Средний</option>
+                <option value="low">Низкий</option>
+              </select>
+            </div>
+            <div>
+              <label class="small">Статус</label>
+              <select id="status">
+                <option value="backlog">Backlog</option>
+                <option value="inprogress" selected>In Progress</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
+            <div>
+              <label class="small">Оценка (часы)</label>
+              <input
+                id="estimate"
+                type="number"
+                min="0"
+                step="0.5"
+                placeholder="0"
+              />
+            </div>
+          </div>
+          <div class="grid-1" style="margin-top: 10px">
+            <div>
+              <label class="small">Описание</label>
+              <textarea id="desc" placeholder="Детали задачи…"></textarea>
+            </div>
+            <div>
+              <label class="small">Подзадачи (по одной в строке)</label>
+              <textarea
+                id="subtasks"
+                placeholder="Сверстать хедер
 Сделать адаптив
-Подключить меню"></textarea>
-        </div>
-        <div class="footer">
-          <button type="button" class="btn secondary" id="cancelBtn">Отмена</button>
-          <button type="submit" class="btn" id="saveBtn">Сохранить</button>
-        </div>
+Подключить меню"
+              ></textarea>
+            </div>
+            <div class="footer">
+              <button type="button" class="btn secondary" id="cancelBtn">
+                Отмена
+              </button>
+              <button type="submit" class="btn" id="saveBtn">Сохранить</button>
+            </div>
+          </div>
+        </form>
       </div>
-    </form>
-  </div>
-</div>
+    </div>
 
-<script>
-(()=> {
-  // ===== API CONFIG =====
-  const API_BASE = "https://genesisprojectsapi.pythonanywhere.com/api";
-  const endpoints = {
-    projects: () => `${API_BASE}/projects/`,
-    tasks:    () => `${API_BASE}/tasks/`,
-    task:     (id) => `${API_BASE}/tasks/${id}/`,
-    taskMove: (id) => `${API_BASE}/tasks/${id}/move/`,
-  };
+    <script>
+      (() => {
+        // ===== API CONFIG =====
+        const API_BASE = "https://genesisprojectsapi.pythonanywhere.com/api";
+        const endpoints = {
+          projects: () => `${API_BASE}/projects/`,
+          tasks: () => `${API_BASE}/tasks/`,
+          task: (id) => `${API_BASE}/tasks/${id}/`,
+          taskMove: (id) => `${API_BASE}/tasks/${id}/move/`,
+        };
 
-  // ===== DOM =====
-  const $  = (s, r=document)=> r.querySelector(s);
-  const $$ = (s, r=document)=> [...r.querySelectorAll(s)];
-  const board = $('#board');
-  const addBtn = $('#addBtn');
-  const resetBtn = $('#resetBtn');
-  const q = $('#q');
-  const filterProject = $('#filterProject');
-  const filterPrio = $('#filterPrio');
-  const sortBy = $('#sortBy');
+        // ===== DOM =====
+        const $ = (s, r = document) => r.querySelector(s);
+        const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+        const board = $("#board");
+        const addBtn = $("#addBtn");
+        const resetBtn = $("#resetBtn");
+        const q = $("#q");
+        const filterProject = $("#filterProject");
+        const filterPrio = $("#filterPrio");
+        const sortBy = $("#sortBy");
 
-  const backdrop = $('#backdrop');
-  const taskForm = $('#taskForm');
-  const mTitle = $('#mTitle');
-  const taskId = $('#taskId');
-  const title = $('#title');
-  const projectSel = $('#project');  // селект проекта (значение = id проекта)
-  const desc = $('#desc');
-  const due = $('#due');
-  const priority = $('#priority');
-  const status = $('#status');
-  const estimate = $('#estimate');
-  const subtasks = $('#subtasks');
+        const backdrop = $("#backdrop");
+        const taskForm = $("#taskForm");
+        const mTitle = $("#mTitle");
+        const taskId = $("#taskId");
+        const title = $("#title");
+        const projectSel = $("#project"); // селект проекта (значение = id проекта)
+        const desc = $("#desc");
+        const due = $("#due");
+        const priority = $("#priority");
+        const status = $("#status");
+        const estimate = $("#estimate");
+        const subtasks = $("#subtasks");
 
-  // ===== STATE =====
-  /** @type {{id:number,title:string}[]} */ let projects = [];
-  /** @type {TaskDTO[]} */ let tasks = [];
-  const projIdToTitle = new Map();  // id -> title
-  const projTitleToId = new Map();  // title -> id
+        // ===== STATE =====
+        /** @type {{id:number,title:string}[]} */ let projects = [];
+        /** @type {TaskDTO[]} */ let tasks = [];
+        const projIdToTitle = new Map(); // id -> title
+        const projTitleToId = new Map(); // title -> id
 
-  // ===== INIT =====
-  init();
-  async function init(){
-    attachDnD();
-    wireEvents();
-    await refreshAll();
-  }
-  function wireEvents(){
-    addBtn.addEventListener('click', () => openModal());
-    resetBtn.addEventListener('click', () => refreshAll());
-    $('#cancelBtn').addEventListener('click', closeModal);
-    backdrop.addEventListener('click', (e)=> { if(e.target===backdrop) closeModal(); });
+        // ===== INIT =====
+        init();
+        async function init() {
+          attachDnD();
+          wireEvents();
+          await refreshAll();
+        }
+        function wireEvents() {
+          addBtn.addEventListener("click", () => openModal());
+          resetBtn.addEventListener("click", () => refreshAll());
+          $("#cancelBtn").addEventListener("click", closeModal);
+          backdrop.addEventListener("click", (e) => {
+            if (e.target === backdrop) closeModal();
+          });
 
-    taskForm.addEventListener('submit', onSubmit);
-    q.addEventListener('input', debounce(refreshTasksOnly, 250));
-    filterProject.addEventListener('change', refreshTasksOnly);
-    filterPrio.addEventListener('change', refreshTasksOnly);
-    sortBy.addEventListener('change', refreshTasksOnly);
+          taskForm.addEventListener("submit", onSubmit);
+          q.addEventListener("input", debounce(refreshTasksOnly, 250));
+          filterProject.addEventListener("change", refreshTasksOnly);
+          filterPrio.addEventListener("change", refreshTasksOnly);
+          sortBy.addEventListener("change", refreshTasksOnly);
 
-    document.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape') closeModal();
-      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='t'){ e.preventDefault(); openModal(); }
-    });
-  }
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeModal();
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "t") {
+              e.preventDefault();
+              openModal();
+            }
+          });
+        }
 
-  async function refreshAll(){
-    await loadProjects();
-    fillProjectControls();
-    await loadTasks();
-    render();
-  }
-  async function refreshTasksOnly(){
-    await loadTasks();
-    render();
-  }
+        async function refreshAll() {
+          await loadProjects();
+          fillProjectControls();
+          await loadTasks();
+          render();
+        }
+        async function refreshTasksOnly() {
+          await loadTasks();
+          render();
+        }
 
-  // ===== API HELPERS =====
-  async function apiFetch(url, opts={}){
-    const res = await fetch(url, {headers:{'Content-Type':'application/json'}, ...opts});
-    if(!res.ok){
-      const txt = await res.text().catch(()=>res.statusText);
-      throw new Error(`HTTP ${res.status}: ${txt}`);
-    }
-    if(res.status===204) return null;
-    return await res.json();
-  }
-  async function loadAllPages(url){
-    let out = [];
-    while(url){
-      const data = await apiFetch(url);
-      if(Array.isArray(data)){ out = data; break; } // на случай отключённой пагинации
-      out = out.concat(data.results || []);
-      url = data.next;
-    }
-    return out;
-  }
+        // ===== API HELPERS =====
+        async function apiFetch(url, opts = {}) {
+          const res = await fetch(url, {
+            headers: { "Content-Type": "application/json" },
+            ...opts,
+          });
+          if (!res.ok) {
+            const txt = await res.text().catch(() => res.statusText);
+            throw new Error(`HTTP ${res.status}: ${txt}`);
+          }
+          if (res.status === 204) return null;
+          return await res.json();
+        }
+        async function loadAllPages(url) {
+          let out = [];
+          while (url) {
+            const data = await apiFetch(url);
+            if (Array.isArray(data)) {
+              out = data;
+              break;
+            } // на случай отключённой пагинации
+            out = out.concat(data.results || []);
+            url = data.next;
+          }
+          return out;
+        }
 
-  // ===== PROJECTS =====
-  async function loadProjects(){
-    projects = await loadAllPages(`${endpoints.projects()}?ordering=title&page_size=500`);
-    projIdToTitle.clear(); projTitleToId.clear();
-    projects.forEach(p => { projIdToTitle.set(p.id, p.title); projTitleToId.set(p.title, p.id); });
-  }
-  function fillProjectControls(){
-    // селект в форме (value = id проекта)
-    projectSel.innerHTML = `<option value="">— Без проекта —</option>` +
-      projects.map(p=>`<option value="${p.id}">${escapeHtml(p.title)}</option>`).join('');
-    // фильтр по проекту (value = title проекта, чтобы работал серверный фильтр ?project=<title>)
-    filterProject.innerHTML = `<option value="">Все проекты</option>` +
-      projects.map(p=>`<option value="${escapeHtml(p.title)}">${escapeHtml(p.title)}</option>`).join('');
-  }
+        // ===== PROJECTS =====
+        async function loadProjects() {
+          projects = await loadAllPages(
+            `${endpoints.projects()}?ordering=title&page_size=500`
+          );
+          projIdToTitle.clear();
+          projTitleToId.clear();
+          projects.forEach((p) => {
+            projIdToTitle.set(p.id, p.title);
+            projTitleToId.set(p.title, p.id);
+          });
+        }
+        function fillProjectControls() {
+          // селект в форме (value = id проекта)
+          projectSel.innerHTML =
+            `<option value="">— Без проекта —</option>` +
+            projects
+              .map(
+                (p) => `<option value="${p.id}">${escapeHtml(p.title)}</option>`
+              )
+              .join("");
+          // фильтр по проекту (value = title проекта, чтобы работал серверный фильтр ?project=<title>)
+          filterProject.innerHTML =
+            `<option value="">Все проекты</option>` +
+            projects
+              .map(
+                (p) =>
+                  `<option value="${escapeHtml(p.title)}">${escapeHtml(
+                    p.title
+                  )}</option>`
+              )
+              .join("");
+        }
 
-  // ===== TASKS =====
-  function orderingParam(){
-    const v = (sortBy.value || 'createdAt-desc');
-    const [key, dir] = v.split('-');
-    const map = {createdAt: 'created_at', due: 'due', prio:'priority'};
-    const apiKey = map[key] || 'created_at';
-    return (dir==='asc') ? apiKey : `-${apiKey}`;
-  }
-  async function loadTasks(){
-    const sp = new URLSearchParams();
-    sp.set('ordering', orderingParam());
-    sp.set('page_size', '500');
-    const projTitle = filterProject.value.trim();
-    const prio = filterPrio.value.trim();
-    const search = q.value.trim();
-    if(projTitle) sp.set('project', projTitle);   // сервер поддерживает проект по названию
-    if(prio)      sp.set('priority', prio);
-    if(search)    sp.set('search', search);
-    tasks = await loadAllPages(`${endpoints.tasks()}?${sp.toString()}`);
-  }
+        // ===== TASKS =====
+        function orderingParam() {
+          const v = sortBy.value || "createdAt-desc";
+          const [key, dir] = v.split("-");
+          const map = { createdAt: "created_at", due: "due", prio: "priority" };
+          const apiKey = map[key] || "created_at";
+          return dir === "asc" ? apiKey : `-${apiKey}`;
+        }
+        async function loadTasks() {
+          const sp = new URLSearchParams();
+          sp.set("ordering", orderingParam());
+          sp.set("page_size", "500");
+          const projTitle = filterProject.value.trim();
+          const prio = filterPrio.value.trim();
+          const search = q.value.trim();
+          if (projTitle) sp.set("project", projTitle); // сервер поддерживает проект по названию
+          if (prio) sp.set("priority", prio);
+          if (search) sp.set("search", search);
+          tasks = await loadAllPages(`${endpoints.tasks()}?${sp.toString()}`);
+        }
 
-  // ===== RENDER =====
-  function render(){
-    let list = [...tasks];
+        // ===== RENDER =====
+        function render() {
+          let list = [...tasks];
 
-    // Гарантируем порядок при "prio-asc/desc" (на сервере уже есть ordering=priority, но доведём ранжированием)
-    const [key,dir] = (sortBy.value||'createdAt-desc').split('-');
-    if(key==='prio'){
-      const rank = v => v==='high'?3:v==='med'?2:1;
-      list.sort((a,b)=> dir==='asc' ? rank(a.priority)-rank(b.priority) : rank(b.priority)-rank(a.priority));
-    }
+          // Гарантируем порядок при "prio-asc/desc" (на сервере уже есть ordering=priority, но доведём ранжированием)
+          const [key, dir] = (sortBy.value || "createdAt-desc").split("-");
+          if (key === "prio") {
+            const rank = (v) => (v === "high" ? 3 : v === "med" ? 2 : 1);
+            list.sort((a, b) =>
+              dir === "asc"
+                ? rank(a.priority) - rank(b.priority)
+                : rank(b.priority) - rank(a.priority)
+            );
+          }
 
-    // Очистить колонки
-    $$('.dropzone').forEach(z=> z.innerHTML='');
+          // Очистить колонки
+          $$(".dropzone").forEach((z) => (z.innerHTML = ""));
 
-    // Сгруппировать
-    const groups = {backlog:[], inprogress:[], done:[]};
-    list.forEach(t=> groups[t.status].push(t));
-    Object.entries(groups).forEach(([st,arr])=>{
-      const zone = $(`.dropzone[data-status="${st}"]`);
-      if(!arr.length){ zone.innerHTML = `<div class="empty">Нет задач</div>`; return; }
-      arr.forEach(t=> zone.appendChild(card(t)));
-    });
-  }
+          // Сгруппировать
+          const groups = { backlog: [], inprogress: [], done: [] };
+          list.forEach((t) => groups[t.status].push(t));
+          Object.entries(groups).forEach(([st, arr]) => {
+            const zone = $(`.dropzone[data-status="${st}"]`);
+            if (!arr.length) {
+              zone.innerHTML = `<div class="empty">Нет задач</div>`;
+              return;
+            }
+            arr.forEach((t) => zone.appendChild(card(t)));
+          });
+        }
 
-  function card(t){
-    const el = document.createElement('div');
-    el.className = 'card';
-    el.draggable = true;
-    el.dataset.id = t.id;
-    const doneCount = (t.subtasks||[]).filter(s=>s.done).length;
-    const projectTitle = t.project_title || (t.project ? (projIdToTitle.get(t.project)||'') : '');
+        function card(t) {
+          const el = document.createElement("div");
+          el.className = "card";
+          el.draggable = true;
+          el.dataset.id = t.id;
+          const doneCount = (t.subtasks || []).filter((s) => s.done).length;
+          const projectTitle =
+            t.project_title ||
+            (t.project ? projIdToTitle.get(t.project) || "" : "");
 
-    el.innerHTML = `
+          el.innerHTML = `
       <div class="row">
-        <div class="title" title="${escapeHtml(t.title)}">${escapeHtml(t.title)}</div>
+        <div class="title" title="${escapeHtml(t.title)}">${escapeHtml(
+            t.title
+          )}</div>
         <div class="actions">
           <button class="iconbtn" data-act="edit" title="Редактировать">✎</button>
           <button class="iconbtn" data-act="del" title="Удалить">🗑</button>
         </div>
       </div>
       <div class="meta">
-        ${projectTitle ? `<span class="chip">${escapeHtml(projectTitle)}</span>`:''}
-        <span class="chip prio-${t.priority}">Приоритет: ${prioText(t.priority)}</span>
-        ${t.due ? `<span class="chip">Срок: ${fmtDate(t.due)}</span>`:''}
-        ${t.estimate? `<span class="chip">Оценка: ${t.estimate} ч</span>`:''}
-        ${(t.subtasks||[]).length? `<span class="chip">${doneCount}/${t.subtasks.length} подзадач</span>`:''}
+        ${
+          projectTitle
+            ? `<span class="chip">${escapeHtml(projectTitle)}</span>`
+            : ""
+        }
+        <span class="chip prio-${t.priority}">Приоритет: ${prioText(
+            t.priority
+          )}</span>
+        ${t.due ? `<span class="chip">Срок: ${fmtDate(t.due)}</span>` : ""}
+        ${t.estimate ? `<span class="chip">Оценка: ${t.estimate} ч</span>` : ""}
+        ${
+          (t.subtasks || []).length
+            ? `<span class="chip">${doneCount}/${t.subtasks.length} подзадач</span>`
+            : ""
+        }
       </div>
-      ${t.desc ? `<div class="meta">${escapeHtml(shorten(t.desc, 140))}</div>`:''}
-      ${(t.subtasks||[]).length ? `<div class="subtasks">
-        ${t.subtasks.map((s,i)=>`
+      ${
+        t.desc
+          ? `<div class="meta">${escapeHtml(shorten(t.desc, 140))}</div>`
+          : ""
+      }
+      ${
+        (t.subtasks || []).length
+          ? `<div class="subtasks">
+        ${t.subtasks
+          .map(
+            (s, i) => `
           <label>
-            <input data-sub="${i}" type="checkbox" ${s.done?'checked':''}>
+            <input data-sub="${i}" type="checkbox" ${s.done ? "checked" : ""}>
             <span>${escapeHtml(s.text)}</span>
           </label>
-        `).join('')}
-      </div>`:''}
+        `
+          )
+          .join("")}
+      </div>`
+          : ""
+      }
     `;
 
-    // Кнопки
-    el.addEventListener('click', async (e)=>{
-      const btn = e.target.closest('[data-act]');
-      if(!btn) return;
-      if(btn.dataset.act==='edit'){ openModal(t); }
-      if(btn.dataset.act==='del'){ await delTask(t.id); await loadTasks(); render(); }
-      e.stopPropagation();
-    });
+          // Кнопки
+          el.addEventListener("click", async (e) => {
+            const btn = e.target.closest("[data-act]");
+            if (!btn) return;
+            if (btn.dataset.act === "edit") {
+              openModal(t);
+            }
+            if (btn.dataset.act === "del") {
+              await delTask(t.id);
+              await loadTasks();
+              render();
+            }
+            e.stopPropagation();
+          });
 
-    // Чекбоксы подзадач -> PATCH всей задачи (subtasks + автопереход в done)
-    el.querySelectorAll('input[type="checkbox"][data-sub]').forEach(chk=>{
-      chk.addEventListener('change', async ()=>{
-        const idx = parseInt(chk.dataset.sub,10);
-        const current = tasks.find(x=>String(x.id)===String(t.id));
-        if(!current) return;
-        const updatedSubs = (current.subtasks||[]).map((s,i)=> i===idx ? {...s, done: chk.checked} : s);
-        const nextStatus = updatedSubs.length && updatedSubs.every(s=>s.done) ? 'done' : current.status;
-        await updateTask(current.id, { subtasks: normalizedSubs(updatedSubs), status: nextStatus });
-        await loadTasks(); render();
-      });
-    });
+          // Чекбоксы подзадач -> PATCH всей задачи (subtasks + автопереход в done)
+          el.querySelectorAll('input[type="checkbox"][data-sub]').forEach(
+            (chk) => {
+              chk.addEventListener("change", async () => {
+                const idx = parseInt(chk.dataset.sub, 10);
+                const current = tasks.find(
+                  (x) => String(x.id) === String(t.id)
+                );
+                if (!current) return;
+                const updatedSubs = (current.subtasks || []).map((s, i) =>
+                  i === idx ? { ...s, done: chk.checked } : s
+                );
+                const nextStatus =
+                  updatedSubs.length && updatedSubs.every((s) => s.done)
+                    ? "done"
+                    : current.status;
+                await updateTask(current.id, {
+                  subtasks: normalizedSubs(updatedSubs),
+                  status: nextStatus,
+                });
+                await loadTasks();
+                render();
+              });
+            }
+          );
 
-    return el;
-  }
-
-  // ===== MODAL =====
-  function openModal(t=null){
-    mTitle.textContent = t? 'Редактирование задачи' : 'Новая задача';
-    taskId.value   = t?.id || '';
-    title.value    = t?.title || '';
-    // в форме значение = id проекта
-    const pid = t?.project || (t?.project_title ? (projTitleToId.get(t.project_title)||'') : '');
-    projectSel.value = pid || '';
-    desc.value     = t?.desc || '';
-    due.value      = t?.due || '';
-    priority.value = t?.priority || 'med';
-    status.value   = t?.status || 'inprogress';
-    estimate.value = t?.estimate ?? '';
-    subtasks.value = ((t?.subtasks)||[]).map(s=>s.text).join('\n');
-
-    backdrop.style.display = 'flex';
-    requestAnimationFrame(()=> title.focus());
-  }
-  function closeModal(){
-    backdrop.style.display = 'none';
-    taskForm.reset();
-    taskId.value = '';
-  }
-
-  async function onSubmit(e){
-    e.preventDefault();
-    const pid = projectSel.value ? Number(projectSel.value) : null;
-    const subArr = (subtasks.value||'').split('\n').map(s=>s.trim()).filter(Boolean).map((text,i)=>({text, done:false, order:i}));
-    const payload = {
-      title: title.value.trim(),
-      project: pid,
-      desc: desc.value.trim(),
-      due: due.value || null,
-      priority: /** @type any */(priority.value),
-      status: /** @type any */(status.value),
-      estimate: Number(estimate.value||0),
-      subtasks: subArr
-    };
-    if(!payload.title){ alert('Название обязательно'); return; }
-
-    try{
-      if(taskId.value){
-        await updateTask(taskId.value, payload);
-      }else{
-        await createTask(payload);
-      }
-      closeModal();
-      await loadTasks(); render();
-    }catch(err){
-      alert('Ошибка сохранения: ' + err.message);
-    }
-  }
-
-  // ===== DRAG & DROP =====
-  function attachDnD(){
-    board.addEventListener('dragstart', (e)=>{
-      const card = e.target.closest('.card'); if(!card) return;
-      e.dataTransfer.setData('text/plain', card.dataset.id);
-      requestAnimationFrame(()=> card.style.opacity='.6');
-    });
-    board.addEventListener('dragend', (e)=>{
-      const card = e.target.closest('.card'); if(card) card.style.opacity='';
-    });
-    $$('.dropzone').forEach(zone=>{
-      zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('dragover'); });
-      zone.addEventListener('dragleave', ()=> zone.classList.remove('dragover'));
-      zone.addEventListener('drop', async e=>{
-        e.preventDefault(); zone.classList.remove('dragover');
-        const id = e.dataTransfer.getData('text/plain');
-        const t = tasks.find(x=>String(x.id)===String(id)); if(!t) return;
-        const newStatus = zone.dataset.status;
-        if(t.status!==newStatus){
-          await moveTask(id, newStatus);
-          await loadTasks(); render();
+          return el;
         }
-      });
-    });
-  }
 
-  // ===== API: TASK CRUD =====
-  async function createTask(body){
-    return await apiFetch(endpoints.tasks(), { method:'POST', body: JSON.stringify(body) });
-  }
-  async function updateTask(id, partial){
-    return await apiFetch(endpoints.task(id), { method:'PATCH', body: JSON.stringify(partial) });
-  }
-  async function delTask(id){
-    if(!confirm('Удалить задачу?')) return;
-    await apiFetch(endpoints.task(id), { method:'DELETE' });
-  }
-  async function moveTask(id, statusVal){
-    await apiFetch(endpoints.taskMove(id), { method:'PATCH', body: JSON.stringify({status: statusVal}) });
-  }
+        // ===== MODAL =====
+        function openModal(t = null) {
+          mTitle.textContent = t ? "Редактирование задачи" : "Новая задача";
+          taskId.value = t?.id || "";
+          title.value = t?.title || "";
+          // в форме значение = id проекта
+          const pid =
+            t?.project ||
+            (t?.project_title ? projTitleToId.get(t.project_title) || "" : "");
+          projectSel.value = pid || "";
+          desc.value = t?.desc || "";
+          due.value = t?.due || "";
+          priority.value = t?.priority || "med";
+          status.value = t?.status || "inprogress";
+          estimate.value = t?.estimate ?? "";
+          subtasks.value = (t?.subtasks || []).map((s) => s.text).join("\n");
 
-  // ===== UTILS =====
-  function normalizedSubs(subs){
-    return (subs||[]).map((s,i)=> ({ text: s.text, done: !!s.done, order: (typeof s.order==='number'? s.order : i) }));
-  }
-  function debounce(fn, wait=250){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), wait); }; }
-  function prioText(v){ return v==='high'?'Высокий': v==='med'?'Средний':'Низкий'; }
-  function fmtDate(d){ try{ return new Date(d+'T00:00:00').toLocaleDateString(); }catch{ return d; } }
-  function shorten(s,n){ return (s||'').length>n ? s.slice(0,n-1)+'…' : (s||''); }
-  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+          backdrop.style.display = "flex";
+          requestAnimationFrame(() => title.focus());
+        }
+        function closeModal() {
+          backdrop.style.display = "none";
+          taskForm.reset();
+          taskId.value = "";
+        }
 
-  // types
-  /**
-   * @typedef {{id:number,title:string,project:number|null,project_title?:string,desc:string,due:string|null,priority:'high'|'med'|'low',status:'backlog'|'inprogress'|'done',estimate:number,subtasks:Array<{id?:number,text:string,done:boolean,order:number}>,created_at:string}} TaskDTO
-   */
-})();
-</script>
-</body>
+        async function onSubmit(e) {
+          e.preventDefault();
+          const pid = projectSel.value ? Number(projectSel.value) : null;
+          const subArr = (subtasks.value || "")
+            .split("\n")
+            .map((s) => s.trim())
+            .filter(Boolean)
+            .map((text, i) => ({ text, done: false, order: i }));
+          const payload = {
+            title: title.value.trim(),
+            project: pid,
+            desc: desc.value.trim(),
+            due: due.value || null,
+            priority: /** @type any */ (priority.value),
+            status: /** @type any */ (status.value),
+            estimate: Number(estimate.value || 0),
+            subtasks: subArr,
+          };
+          if (!payload.title) {
+            alert("Название обязательно");
+            return;
+          }
+
+          try {
+            if (taskId.value) {
+              await updateTask(taskId.value, payload);
+            } else {
+              await createTask(payload);
+            }
+            closeModal();
+            await loadTasks();
+            render();
+          } catch (err) {
+            alert("Ошибка сохранения: " + err.message);
+          }
+        }
+
+        // ===== DRAG & DROP =====
+        function attachDnD() {
+          board.addEventListener("dragstart", (e) => {
+            const card = e.target.closest(".card");
+            if (!card) return;
+            e.dataTransfer.setData("text/plain", card.dataset.id);
+            requestAnimationFrame(() => (card.style.opacity = ".6"));
+          });
+          board.addEventListener("dragend", (e) => {
+            const card = e.target.closest(".card");
+            if (card) card.style.opacity = "";
+          });
+          $$(".dropzone").forEach((zone) => {
+            zone.addEventListener("dragover", (e) => {
+              e.preventDefault();
+              zone.classList.add("dragover");
+            });
+            zone.addEventListener("dragleave", () =>
+              zone.classList.remove("dragover")
+            );
+            zone.addEventListener("drop", async (e) => {
+              e.preventDefault();
+              zone.classList.remove("dragover");
+              const id = e.dataTransfer.getData("text/plain");
+              const t = tasks.find((x) => String(x.id) === String(id));
+              if (!t) return;
+              const newStatus = zone.dataset.status;
+              if (t.status !== newStatus) {
+                await moveTask(id, newStatus);
+                await loadTasks();
+                render();
+              }
+            });
+          });
+        }
+
+        // ===== API: TASK CRUD =====
+        async function createTask(body) {
+          return await apiFetch(endpoints.tasks(), {
+            method: "POST",
+            body: JSON.stringify(body),
+          });
+        }
+        async function updateTask(id, partial) {
+          return await apiFetch(endpoints.task(id), {
+            method: "PATCH",
+            body: JSON.stringify(partial),
+          });
+        }
+        async function delTask(id) {
+          if (!confirm("Удалить задачу?")) return;
+          await apiFetch(endpoints.task(id), { method: "DELETE" });
+        }
+        async function moveTask(id, statusVal) {
+          await apiFetch(endpoints.taskMove(id), {
+            method: "PATCH",
+            body: JSON.stringify({ status: statusVal }),
+          });
+        }
+
+        // ===== UTILS =====
+        function normalizedSubs(subs) {
+          return (subs || []).map((s, i) => ({
+            text: s.text,
+            done: !!s.done,
+            order: typeof s.order === "number" ? s.order : i,
+          }));
+        }
+        function debounce(fn, wait = 250) {
+          let t;
+          return (...args) => {
+            clearTimeout(t);
+            t = setTimeout(() => fn(...args), wait);
+          };
+        }
+        function prioText(v) {
+          return v === "high" ? "Высокий" : v === "med" ? "Средний" : "Низкий";
+        }
+        function fmtDate(d) {
+          try {
+            return new Date(d + "T00:00:00").toLocaleDateString();
+          } catch {
+            return d;
+          }
+        }
+        function shorten(s, n) {
+          return (s || "").length > n ? s.slice(0, n - 1) + "…" : s || "";
+        }
+        function escapeHtml(s) {
+          return String(s).replace(
+            /[&<>"']/g,
+            (m) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;",
+              }[m])
+          );
+        }
+
+        // types
+        /**
+         * @typedef {{id:number,title:string,project:number|null,project_title?:string,desc:string,due:string|null,priority:'high'|'med'|'low',status:'backlog'|'inprogress'|'done',estimate:number,subtasks:Array<{id?:number,text:string,done:boolean,order:number}>,created_at:string}} TaskDTO
+         */
+      })();
+    </script>
+  </body>
 </html>
